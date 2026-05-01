@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Antes / Después</title>
+
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.contenedor {
+  position: relative;
+  width: 800px;
+  max-width: 95%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.contenedor img {
+  width: 100%;
+  display: block;
+}
+
+.despues {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: white;
+  cursor: ew-resize;
+}
+
+.boton {
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* etiquetas */
+.label {
+  position: absolute;
+  top: 15px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-family: Arial;
+  color: white;
+  background: rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+
+.antes { left: 15px; }
+.despues-label { right: 15px; }
+</style>
+</head>
+
+<body>
+
+<div class="contenedor" id="comparador">
+  <img src="antes.jpg" alt="Antes">
+
+  <div class="despues" id="despues">
+    <img src="despues.jpg" alt="Después">
+  </div>
+
+  <div class="slider" id="slider">
+    <div class="boton"></div>
+  </div>
+
+  <div class="label antes">ANTES</div>
+  <div class="label despues-label">AHORA</div>
+</div>
+
+<script>
+const slider = document.getElementById("slider");
+const despues = document.getElementById("despues");
+const contenedor = document.getElementById("comparador");
+
+let activo = false;
+
+// RATÓN
+slider.addEventListener("mousedown", () => activo = true);
+window.addEventListener("mouseup", () => activo = false);
+
+window.addEventListener("mousemove", (e) => {
+  if (!activo) return;
+  mover(e.clientX);
+});
+
+// TÁCTIL (MÓVIL)
+slider.addEventListener("touchstart", () => activo = true);
+window.addEventListener("touchend", () => activo = false);
+
+window.addEventListener("touchmove", (e) => {
+  if (!activo) return;
+  mover(e.touches[0].clientX);
+});
+
+function mover(x) {
+  let rect = contenedor.getBoundingClientRect();
+  let pos = x - rect.left;
+
+  if (pos < 0) pos = 0;
+  if (pos > rect.width) pos = rect.width;
+
+  slider.style.left = pos + "px";
+  despues.style.width = pos + "px";
+}
+</script>
+
+</body>
+</html>
